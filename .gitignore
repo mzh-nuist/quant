@@ -30,8 +30,5 @@ self quant/results/
 # Environment
 .env
 
-# Quant intern - archives and generated files
-quant intern/_archived/
-quant intern/research_cache/
-quant intern/茆子豪—试用工作1/
-*.zip
+# Quant intern - research workspace, not for commit
+quant intern/
