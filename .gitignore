@@ -21,11 +21,17 @@ env/
 Thumbs.db
 
 # Project data
-data/*.csv
-results/*.png
+self quant/data/
+self quant/results/
 
 # Jupyter
 .ipynb_checkpoints/
 
 # Environment
 .env
+
+# Quant intern - archives and generated files
+quant intern/_archived/
+quant intern/research_cache/
+quant intern/茆子豪—试用工作1/
+*.zip
