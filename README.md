@@ -1,6 +1,8 @@
 # Quant
 
-A 股量化策略回测框架，基于 [backtrader](https://www.backtrader.com/)，数据源 [Yahoo Finance](https://pypi.org/project/yfinance/)（需代理）+ 本地 CSV 缓存。
+A 股量化策略回测框架，基于 [backtrader](https://www.backtrader.com/)，数据源 [Yahoo Finance](https://pypi.org/project/yfinance/) + [akshare](https://github.com/akfamily/akshare) + 本地 CSV 缓存。
+
+🔬 **因子研究项目：** [quant-intern](https://github.com/mzh-nuist/quant-intern) — A 股多市值层因子系统性研究（微盘→超大市值），七层交叉验证框架，聚宽实盘策略
 
 ---
 
@@ -10,6 +12,7 @@ A 股量化策略回测框架，基于 [backtrader](https://www.backtrader.com/)
 |------|------|------|------|
 | [dual_ma/](dual_ma/) | SMA 双均线交叉 | 金叉买入、死叉卖出，支持止损，CLI + GUI | [README](dual_ma/README.md) |
 | [multifactor/](multifactor/) | 多因子选股 | 月度调仓，五因子打分，等权组合 | [README](multifactor/README.md) |
+| [etf_rotation/](etf_rotation/) | ETF 动量轮动 | 双周调仓，趋势过滤+波动率校准+截面动量+相关性去重 | 见下方 |
 
 ---
 
@@ -35,6 +38,13 @@ qu/
 │   ├── main.py                #   命令行入口
 │   └── gui.py                 #   Tkinter 图形界面
 │
+├── etf_rotation/              # ETF 动量轮动策略
+│   ├── strategy.py            #   策略核心：趋势过滤+截面动量+波动率校准+相关性去重
+│   ├── backtest.py            #   事件驱动回测引擎（手续费+滑点+参数扫描）
+│   ├── data_fetcher.py        #   ETF 数据获取（akshare，21只跨资产ETF）
+│   ├── main.py                #   命令行入口，支持参数扫描
+│   └── data/                  #   ETF 行情缓存
+│
 └── README.md                  # 本文件（项目概览）
 ```
 
@@ -45,7 +55,7 @@ qu/
 ```bash
 conda create -n quant python=3.12 -y
 conda activate quant
-pip install backtrader pandas matplotlib yfinance numpy scipy
+pip install backtrader pandas matplotlib yfinance numpy scipy akshare
 ```
 
 ---
@@ -59,7 +69,7 @@ python dual_ma/main.py                              # 默认回测（茅台 6005
 python dual_ma/main.py -c 000001 -s 5 -l 20         # 自定义参数
 python dual_ma/main.py --stop-loss                   # 启用移动止损
 python dual_ma/main.py --optimize                    # 参数网格搜索
-python dual_ma/main.py --refresh                     # 强制刷新数据（跳过缓存，从网络获取）
+python dual_ma/main.py --refresh                     # 强制刷新数据
 python dual_ma/gui.py                                # 图形界面
 ```
 
@@ -74,6 +84,13 @@ python -m multifactor.gui                            # 图形界面
 ```
 
 详细文档：[multifactor/README.md](multifactor/README.md)
+
+### ETF 动量轮动策略
+
+```bash
+python etf_rotation/main.py                          # 默认回测（21只ETF，5持仓）
+python etf_rotation/main.py --sweep                  # 参数网格扫描
+```
 
 ---
 
